@@ -1,9 +1,6 @@
-###__Trees__
+# Trees
 
-
-
-####__Classification Tree__
-```{r}
+# Classification Tree
 tree.fit =tree(highPrice~.-lprice ,mydf )
 summary (tree.fit )
 plot(tree.fit )
@@ -12,93 +9,71 @@ tree.fit
 set.seed (1023)
 train=sample (1: nrow(x ), 2450)
 mydf.test=mydf [-train ,]
-#str(mydf.test)
 highPrice.test=highPrice[-train ]
-#str(highPrice.test)
-```
+# str(mydf.test)
+# str(highPrice.test)
 
-###### __Fitting the tree model using training data: __
-```{r}
+# Fit the tree model using training data
 tree.fit =tree(highPrice~.-lprice ,mydf ,subset =train )
-```
 
-###### __Prediction using the fitted model and test data: __
-```{r}
+# Prediction using the fitted model and test data:
 tree.pred=predict (tree.fit ,mydf.test ,type ="class")
 table(tree.pred ,highPrice.test)
-```
-######__Results:__
 
-* Cross Validation:
-![](addplot2.png)
+# Results:
 
-* Number of terminal nodes: 7
+# * Cross Validation:
 
-* Residual mean deviance: 0.9099 = 3428 / 3767
+# * Number of terminal nodes: 7
 
-* Misclassification error rate: 0.2101 = 793 / 3774
+# * Residual mean deviance: 0.9099 = 3428 / 3767
 
-* The Training Error rate is about 21%
+# * Misclassification error rate: 0.2101 = 793 / 3774
 
-* The residual deviance rate is about 91% indicating that the tree model does not give a good fit. 
+# * The Training Error rate is about 21%
+
+# * The residual deviance rate is about 91% indicating that the tree model does not give a good fit. 
 
 
-#####__Pruning of Classification Tree__
-```{r}
+# Pruning of Classification Tree
 set.seed (3199)
 prune.mydf =prune.misclass (tree.fit ,best =3)
 plot(prune.mydf )
 text(prune.mydf ,pretty =0)
 tree.pred=predict (prune.mydf , mydf.test ,type="class")
 table(tree.pred ,highPrice.test)
-```
-* Cross Validation:
 
-![](addplot3.png)
-####__Fitting A Regression Tree__
+# Fitting A Regression Tree
 
-######__Define data that will be used for fitting Regression Tree:__
-```{r}
+# Define data that will be used for fitting Regression Tree:
 regTree<-mydf[c(-11)]
 str(regTree)
-```
-######__regTree data contains 3774 obs. of  10 variables__
-```{r}
+# regTree data contains 3774 obs. of  10 variables
 set.seed (1001)
 train = sample (1: nrow(regTree ),2*nrow(regTree )/3)
-```
-######__training data set = 2516 obs, and testing = 1258 obs.__
-```{r}
+# training data set = 2516 obs, and testing = 1258 obs.
 tree.regTree =tree(lprice~.,regTree ,subset =train)
 summary (tree.regTree )
 plot(tree.regTree )
 text(tree.regTree ,pretty =0)
-```
 
-######__Determining Model improvement using pruning:__
+# Determining Model improvement using pruning.
 
-* Cross Validation:
-![](addplot4.png)
-* Cross-Validation function cv.tree() function is used  to determine whether pruning the tree will improve performance: It indicates that the optimal single tree size is = 7 terminal nodes. 
-```{r}
-##********cv.regTree =cv.tree(tree.regTree )
-#********plot(cv.regTree$size ,cv.regTree$dev ,type='b')
-#Pruning the tree selected by cross-validation.
+# Cross-Validation function cv.tree() function is used  to determine whether pruning the tree will improve performance.
+# It indicates that the optimal single tree size is = 7 terminal nodes. 
+# cv.regTree =cv.tree(tree.regTree )
+# plot(cv.regTree$size ,cv.regTree$dev ,type='b')
+
+# Prune the tree selected by cross-validation.
 prune.regTree =prune.tree(tree.regTree ,best =7)
 plot(prune.regTree )
 text(prune.regTree ,pretty =0)
-```
 
-######__Predictions using unpruned tree:__
-```{r}
+# Predictions using unpruned tree:
 yhat=predict (tree.regTree ,newdata =regTree [-train ,])
 regTree.test=regTree [-train ,"lprice"]
 plot(yhat ,regTree.test)
 abline (0,1)
-```
 
-######__MSE:__
-
-```{r}
+# MSE:
 mean((yhat -regTree.test)^2)
-```

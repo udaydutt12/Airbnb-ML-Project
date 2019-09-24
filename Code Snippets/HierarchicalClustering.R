@@ -1,36 +1,30 @@
+# Hierarchical Clustering
 
-####__Hierarchical Clustering__
-
-
-######__Create new data for KMEAN by removing categorial variables__
-```{r}
+# Create new data for KMEAN by removing categorial variables
 clust.dat<-mydf[c(6:7)]
+
 #head(clust.dat)
 #Remove missing observations from the data
 #na.omit(clust.dat)
-```
-######__Use Complete cluster method__
-```{r}
+
+
+#Use Complete Cluster Method
 clust.complete=hclust(dist(clust.dat),method="complete")
 plot(clust.complete)
-```
-######__Cut off the tree at the desired number of clusters using cutree__
-```{r}
+
+# Cut off the tree at the desired number of clusters using cutree
 clusterCut <- cutree(clust.complete, 3)
 table(clusterCut, mydf$rmType)
-```
-######__Try whether one can improve using a different linkage method__
-```{r}
+
+# Any improvement using a different linkage method?
 clust.average=hclust(dist(clust.dat),method="average")
 plot(clust.average)
-```
-######__Try whether one can improve using a different linkage method__
-```{r}
+
+# Any improvement using a different linkage method?
 clust.single=hclust(dist(clust.dat),method="single")
 plot(clust.single)
-```
+
 # Plot Identified Clusters
-```{r}
 ggplot(mydf, aes(numReviews, revPerMonth, color = mydf$rmType)) + 
   geom_point(alpha = 0.4, size = 3.5) + geom_point(col = clusterCut) + 
   scale_color_manual(values = c('black', 'red', 'green'))
