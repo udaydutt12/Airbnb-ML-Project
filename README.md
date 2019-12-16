@@ -2,7 +2,7 @@
 
 ![](airbnb2.png)
 
-## In this Project, I explore the following Data Analysis/Machine Learning Techniques in order to find trends in Airbnb data in the Austin, Texas area.
+## In this Project, I explore the following Data Analysis/Machine Learning Techniques in order to find trends in Airbnb data in the Austin, Texas area. Please refer to the Code Snippets for my comments and conclusions.
 
 ### 1. Bagging
 ### 2. Booting
